@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Technimble 2025 Registration</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: white;
+      text-align: center;
+      overflow-x: hidden;
+    }
+    header {
+      padding: 60px 20px;
+    }
+    h1 {
+      font-size: 3rem;
+      text-shadow: 0 0 20px #00f7ff;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-weight: 400;
+      margin-bottom: 40px;
+    }
+    #countdown {
+      font-size: 2rem;
+      margin: 20px 0;
+      color: #00f7ff;
+      text-shadow: 0 0 10px #00f7ff;
+    }
+    .btn {
+      display: inline-block;
+      padding: 15px 30px;
+      margin-top: 30px;
+      background: #00f7ff;
+      color: #111;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 40px;
+      text-decoration: none;
+      box-shadow: 0 0 20px #00f7ff;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: #00c4cc;
+      box-shadow: 0 0 30px #00f7ff;
+    }
+    footer {
+      margin-top: 60px;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+    canvas#confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+  <header>
+    <h1>?? Technimble 2025</h1>
+    <h2>Scan • Register • Innovate</h2>
+    <div id="countdown"></div>
+    <a href="YOUR_GOOGLE_FORM_LINK" target="_blank" class="btn">Register Now</a>
+  </header>
+
+  <footer>
+    <p>?? technimble.college@gmail.com | ?? Your College Name</p>
+  </footer>
+
+  <script>
+    // Countdown Timer
+    const eventDate = new Date("2025-11-15T09:00:00").getTime(); // set your event date
+    const countdownEl = document.getElementById("countdown");
+    setInterval(() => {
+      const now = new Date().getTime();
+      const distance = eventDate - now;
+      if (distance < 0) {
+        countdownEl.innerHTML = "Event Started!";
+        return;
+      }
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }, 1000);
+
+    // Confetti Animation
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function createParticle() {
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 200,
+        color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+        tilt: Math.random() * 10 - 10,
+        tiltAngle: 0,
+        tiltAngleIncrement: Math.random() * 0.07 + 0.05,
+      };
+    }
+
+    for (let i = 0; i < 150; i++) {
+      particles.push(createParticle());
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p) => {
+        ctx.beginPath();
+        ctx.lineWidth = p.r;
+        ctx.strokeStyle = p.color;
+        ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+        ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+        ctx.stroke();
+      });
+      update();
+      requestAnimationFrame(draw);
+    }
+
+    function update() {
+      particles.forEach((p) => {
+        p.tiltAngle += p.tiltAngleIncrement;
+        p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+        p.x += Math.sin(p.d);
+        p.tilt = Math.sin(p.tiltAngle) * 15;
+
+        if (p.y > canvas.height) {
+          p.x = Math.random() * canvas.width;
+          p.y = -20;
+        }
+      });
+    }
+
+    draw();
+  </script>
+</body>
+</html>
